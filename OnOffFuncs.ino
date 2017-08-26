@@ -48,10 +48,10 @@ void hardPowerOffComputer() {
 
 void powerOnRelay() {
   if (curState == 0) {
-    digitalWrite(RELAY_POSPIN, HIGH);
-    curState = 1;
-    client.publish(TOPIC_T, "Starting");
-    startupFlag = 1;
+      digitalWrite(RELAY_POSPIN, HIGH);
+      curState = 1;
+      client.publish(TOPIC_T, "Starting");
+      startupFlag = 1;
   } else {
     client.publish(TOPIC_T, "Warning: Device already on");
     startupFlag = 1;
@@ -71,29 +71,27 @@ void powerOffRelay() {
 }
 
 void powerOffInfrared(){
-  if (curState) {
-    irsend.send_raw("NEC", 0xCC0000FF, 32);
+  //if (curState) {
+    irsend.sendNEC(0x4CB3748B, 32);
     delay(1000);
-    irsend.send_raw("NEC", 0xCC0000FF, 32);
-    delay(1000);
+    irsend.sendNEC(0x4CB3748B, 32);
+    delay(2000);
     client.publish(TOPIC_T, "Turning off");  
     startupFlag = 1;
-  } else {
-    client.publish(TOPIC_T, "Warning: Device already off");
-    startupFlag = 1;
-  }
+  //} else {
+  //  client.publish(TOPIC_T, "Warning: Device already off");
+  //  startupFlag = 1;
+  //}
 }
 
 void powerOnInfrared(){
-  if (!curState) {
-    irsend.send_raw("NEC", 0xCC0000FF, 32);
-    delay(1000);
-    irsend.send_raw("NEC", 0xCC0000FF, 32);
-    delay(1000);
+  //if (!curState) {
+    irsend.sendNEC(0x4CB340BF, 32);
+    delay(2000);    
     client.publish(TOPIC_T, "Starting");  
     startupFlag = 1;
-  } else {
-    client.publish(TOPIC_T, "Warning: Device already on");
-    startupFlag = 1;
-  }
+  //} else {
+  //  client.publish(TOPIC_T, "Warning: Device already on");
+  //  startupFlag = 1;
+  //}
 }
